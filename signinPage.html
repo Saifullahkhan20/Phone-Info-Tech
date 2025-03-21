@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoneInfotec - Sign In / Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Styling */
+        .topnav {
+            overflow: hidden;
+            background-color: #e9e9e9;
+        }
+        .topnav a {
+            float: left;
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .topnav a.active {
+            background-color: #2196F3;
+            color: white;
+        }
+        .head {
+            display: flex;
+            flex-direction: column;
+            font-size: 50px;
+            align-items: center;
+            font-weight: bold;
+            width: 100%;
+            background-color: #000;
+            color: white;
+            padding: 20px 0;
+        }
+        .container-auth {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+                        0 10px 10px rgba(0, 0, 0, 0.22);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            min-height: 500px;
+            margin: 50px auto;
+        }
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transition: all 0.6s ease-in-out;
+        }
+        .sign-in-container {
+            left: 0;
+            z-index: 2;
+        }
+        .sign-up-container, .forgot-password-container {
+            left: 100%;
+            z-index: 1;
+            opacity: 0;
+        }
+        .container-auth.right-panel-active .sign-in-container {
+            left: -100%;
+            opacity: 0;
+        }
+        .container-auth.right-panel-active .sign-up-container {
+            left: 0;
+            opacity: 1;
+            z-index: 2;
+        }
+        .container-auth.forgot-panel-active .sign-in-container {
+            left: -100%;
+            opacity: 0;
+        }
+        .container-auth.forgot-panel-active .forgot-password-container {
+            left: 0;
+            opacity: 1;
+            z-index: 2;
+        }
+        .form-control {
+            margin-bottom: 1rem;
+        }
+        .invalid-feedback {
+            display: none;
+            color: red;
+        }
+        .was-validated .form-control:invalid ~ .invalid-feedback {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="topnav">
+        <a class="active" href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#Laptops">Laptops</a>
+        <a href="#Phones">Phones</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <div class="head">Phone Info Tech</div>
+
+    <!-- Auth Section -->
+    <div class="container-auth" id="containerAuth">
+        <!-- Sign In Form -->
+        <div class="form-container sign-in-container">
+            <form id="signInForm" class="px-5" novalidate>
+                <h2 class="mb-4">Sign In</h2>
+                <input type="email" class="form-control" id="signInEmail" placeholder="Email" required />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+                <input type="password" class="form-control" id="signInPassword" placeholder="Password" required />
+                <div class="invalid-feedback">Please enter your password.</div>
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                <button type="button" class="btn btn-link mt-2 w-100" id="forgotPasswordBtn">Forgot Password?</button>
+                <button type="button" class="btn btn-light mt-3 w-100" id="signUpBtn">Sign Up</button>
+            </form>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div class="form-container sign-up-container">
+            <form id="signUpForm" class="px-5" novalidate>
+                <h2 class="mb-4">Create Account</h2>
+                <input type="text" class="form-control" id="signUpName" placeholder="Name" required />
+                <div class="invalid-feedback">Please enter your name.</div>
+                <input type="email" class="form-control" id="signUpEmail" placeholder="Email" required />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+                <input type="password" class="form-control" id="signUpPassword" placeholder="Password (min. 6 characters)" required minlength="6" />
+                <div class="invalid-feedback">Password must be at least 6 characters.</div>
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                <button type="button" class="btn btn-light mt-3 w-100" id="signInBtn">Sign In</button>
+            </form>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div class="form-container forgot-password-container">
+            <form id="forgotPasswordForm" class="px-5" novalidate>
+                <h2 class="mb-4">Reset Password</h2>
+                <p class="text-muted">Enter your email, and we will send you a password reset link.</p>
+                <input type="email" class="form-control" id="forgotEmail" placeholder="Email" required />
+                <div class="invalid-feedback">Please enter a valid email.</div>
+                <button type="submit" class="btn btn-primary w-100">Send Reset Link</button>
+                <button type="button" class="btn btn-light mt-3 w-100" id="backToSignInBtn">Back to Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const containerAuth = document.getElementById("containerAuth");
+            const signUpBtn = document.getElementById("signUpBtn");
+            const signInBtn = document.getElementById("signInBtn");
+            const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+            const backToSignInBtn = document.getElementById("backToSignInBtn");
+
+            // Toggle to Sign Up Form
+            signUpBtn.addEventListener("click", () => {
+                containerAuth.classList.add("right-panel-active");
+                containerAuth.classList.remove("forgot-panel-active");
+            });
+
+            // Toggle to Sign In Form
+            signInBtn.addEventListener("click", () => {
+                containerAuth.classList.remove("right-panel-active");
+                containerAuth.classList.remove("forgot-panel-active");
+            });
+
+            // Toggle to Forgot Password Form
+            forgotPasswordBtn.addEventListener("click", () => {
+                containerAuth.classList.add("forgot-panel-active");
+            });
+
+            // Back to Sign In Form
+            backToSignInBtn.addEventListener("click", () => {
+                containerAuth.classList.remove("forgot-panel-active");
+            });
+
+            // Form Validation
+            document.querySelectorAll("form").forEach((form) => {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (!form.checkValidity()) {
+                        form.classList.add("was-validated");
+                    } else {
+                        alert("Form submitted successfully!");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
